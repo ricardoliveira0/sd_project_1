@@ -31,7 +31,7 @@ public class Server {
         }
         
         
-        try {
+        try { // Try to open the file with properties and read each parameter
             InputStream cfgFile = new FileInputStream("/resources/config.properties");
             Properties config = new Properties();
             config.load(cfgFile);
@@ -51,7 +51,7 @@ public class Server {
             dbC.connect();
             Statement stmt = dbC.getStatement();
             
-            RunningEvents event = new RunningEvents // RunningEvents(stmt);
+            RunningEvents event = new RunningEvents(stmt);
             
             java.rmi.registry.Registry registry = java.rmi.registry.LocateRegistry.getRegistry(port);
             registry.rebind("runningevents", event);
