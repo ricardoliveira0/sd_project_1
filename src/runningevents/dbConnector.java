@@ -10,6 +10,7 @@ import java.sql.*;
  *
  * @author ricardo
  */
+
 public class dbConnector {
     private String PG_HOST;
     private String PG_DB;
