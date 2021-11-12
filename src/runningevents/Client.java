@@ -4,7 +4,7 @@
  */
 package runningevents;
 
-import java.util.Scanner;
+import java.util.*;
 
 /**
  *
@@ -16,6 +16,12 @@ public class Client {
     private static String host;
     private static int port, opt, read;
     private static byte[] b = new byte[128];
+    
+    public static void output(serverCallback cb){
+        for (int i = 0; i < cb.getList().size(); i++){
+            System.out.println(cb.getList().get(i));
+        }
+    }
     
     public static void main(String[] args) {
         
@@ -32,8 +38,8 @@ public class Client {
         
         try {
             RunningEvents event = (RunningEvents) java.rmi.Naming.lookup("rmi://" + host + ":" + port + "/runningevents");
+            System.out.println("Successfully connected to " + host + ":" + port);
             while(true) {
-                System.out.println("Successfully connected to " + host + ":" + port);
                 System.out.println("==============================================");
                 System.out.println("==================== MENU ====================");
                 System.out.println("1. Register new event");
@@ -53,15 +59,23 @@ public class Client {
                         read = System.in.read(b);
                         String eventName = new String(b, 0, read -1);
                         
-                        System.out.println("Submit the event date. Format <YY-MM-DD>:");
+                        System.out.println("Submit the event date. Format <YYYY-MM-DD>:");
                         read = System.in.read(b);
                         String eventDate = new String(b, 0, read -1);
                         
+                        System.out.println("Submit the event type.");
+                        System.out.println("1- Track. 2- Road. 3- Trails");
+                        int eventType = scanner.nextInt();
+                        
+                        event.registerEvent(eventName, eventDate, eventType);
+                        
                         break;
                     case 2: // Get all events -> day
-                        System.out.println("Submit the event date to search. Format <YY-MM-DD>:");
+                        System.out.println("Submit the event date to search. Format <YYYY-MM-DD>:");
                         read = System.in.read(b);
                         String eventSearchDate = new String(b, 0, read -1);
+                        
+                        output(event.getDayEvents(eventSearchDate));
                         
                         break;
                     case 3: // Register new participant
@@ -77,11 +91,19 @@ public class Client {
                         read = System.in.read(b);
                         String participantEchelon = new String(b, 0, read -1);
                         
+                        System.out.println("Submit event name to register this participant:");
+                        read = System.in.read(b);
+                        String eventNameToRegisterParticipant = new String(b, 0, read -1);
+                        
+                        event.registerParticipant(participantName, participantGender, participantEchelon, eventNameToRegisterParticipant);
+                        
                         break;
                     case 4: // List participants -> event
                         System.out.println("Submit the event name:");
                         read = System.in.read(b);
                         String eventSearchName = new String(b, 0, read -1);
+                        
+                        output(event.listParticipants(eventSearchName));
                         
                         break;
                     case 5: // Set participant trial time
@@ -90,8 +112,7 @@ public class Client {
                         String eventNameForTrialTime = new String(b, 0, read -1);
                         
                         System.out.println("Submit the participant number:");
-                        read = System.in.read(b);
-                        String participantNoForTrialTime = new String(b, 0, read -1);
+                        int participantNoForTrialTime = scanner.nextInt();
                         
                         System.out.println("Submit the participant trial time:");
                         read = System.in.read(b);

@@ -11,11 +11,11 @@ package runningevents;
 
 public interface RunningEvents extends java.rmi.Remote {
     
-    public void registerEvent(String name, String date) throws java.rmi.RemoteException;
+    public void registerEvent(String name, String date, int type) throws java.rmi.RemoteException;
     
     public serverCallback getDayEvents(String date) throws java.rmi.RemoteException;
     
-    public void registerParticipant(String name, String gender, String echelon) throws java.rmi.RemoteException;
+    public void registerParticipant(String participantName, String gender, String echelon, String eventName) throws java.rmi.RemoteException;
     
     public serverCallback listParticipants(String name) throws java.rmi.RemoteException;
     
