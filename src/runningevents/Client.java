@@ -22,6 +22,7 @@ public class Client {
         if(args.length == 2) {
             host = args[0];
             port = Integer.parseInt(args[1]);
+            System.out.println("HOST:"+host+" | PORT:"+port);
         } 
         else {
             System.err.println("Error: Invalid format. Args format: '<host> <port>'");
@@ -157,9 +158,11 @@ public class Client {
                         }
                         
                         break;
-                    case 8:
-                        
+                    case 8: // Exit
+                        System.exit(0);
                         break;
+                    default: 
+                        System.err.println("Invalid option.");
                 }
             }
         } catch(Exception e) {
