@@ -14,4 +14,11 @@ import java.util.*;
 public class serverCallback implements java.io.Serializable {
     List<String> list = new ArrayList<String>();
     
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+    
+    public List<String> getList() {
+        return list;
+    }
 }
