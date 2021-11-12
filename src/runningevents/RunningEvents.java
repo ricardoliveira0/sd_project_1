@@ -10,17 +10,19 @@ package runningevents;
  */
 
 public interface RunningEvents extends java.rmi.Remote {
-    public void registerEvent(String name, String date);
     
-    public void getDayEvents(String date);
+    public void registerEvent(String name, String date) throws java.rmi.RemoteException;
     
-    public void registerParticipant(String name, String gender, String echelon);
+    public serverCallback getDayEvents(String date) throws java.rmi.RemoteException;
     
-    public void listParticipants(String name);
+    public void registerParticipant(String name, String gender, String echelon) throws java.rmi.RemoteException;
     
-    public void setParticipantTrialTime(String name, int number, String time);
+    public serverCallback listParticipants(String name) throws java.rmi.RemoteException;
     
-    public void getGeneralScoreboard(String name, int type);
+    public void setParticipantTrialTime(String name, int number, String time) throws java.rmi.RemoteException;
     
-    public void getPodium(String name, int echelon);
+    public serverCallback getGeneralScoreboard(String name, int type) throws java.rmi.RemoteException;
+    
+    public serverCallback getPodium(String name, int echelon) throws java.rmi.RemoteException;
+    
 }
