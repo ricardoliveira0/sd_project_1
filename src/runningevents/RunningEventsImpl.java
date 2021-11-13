@@ -115,7 +115,7 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
     public serverCallback listParticipants(String name) throws RemoteException {
         serverCallback cb = new serverCallback();
         try {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + name);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM \"" + name + "\"");
             while(rs.next()) {
                 String participantID = rs.getString("id");
                 String participantName = rs.getString("name");
