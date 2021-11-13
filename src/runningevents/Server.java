@@ -29,17 +29,17 @@ public class Server {
             System.err.println("Error: No port specified.");
             System.exit(1);
         }
-        
+        System.out.println(port);
         
         try { // Try to open the file with properties and read each parameter
-            InputStream cfgFile = new FileInputStream("/resources/config.properties");
+            InputStream cfgFile = new FileInputStream("resources/config.properties");
             Properties config = new Properties();
             config.load(cfgFile);
             host = config.getProperty("db.host");
             name = config.getProperty("db.name");
             username = config.getProperty("db.username");
             password = config.getProperty("db.password");
-            System.out.println(host + "" + name + "" + "" + username + "" + password);
+            System.out.println(host + " " + name + " " + username + " " + password);
         } catch(IOException e) {
             System.err.println("Error: Could not read '/resources/config.properties'.");
             System.exit(1);
@@ -51,16 +51,16 @@ public class Server {
             dbC.connect();
             Statement stmt = dbC.getStatement();
             
-            RunningEvents event = new RunningEvents(stmt);
+            RunningEvents event = new RunningEventsImpl(stmt);
             
             java.rmi.registry.Registry registry = java.rmi.registry.LocateRegistry.getRegistry(port);
             registry.rebind("runningevents", event);
             
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
             System.err.println("Error: Could not establish connection to the database.");
         }
-
-        dbC.disconnect();
+        
+        //dbC.disconnect();
     }
 }
