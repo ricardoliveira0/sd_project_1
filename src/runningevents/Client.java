@@ -87,9 +87,9 @@ public class Client {
                         read = System.in.read(b);
                         String participantGender = new String(b, 0, read -1);
                         
-                        System.out.println("Submit the echelon:");
-                        read = System.in.read(b);
-                        String participantEchelon = new String(b, 0, read -1);
+                        System.out.println("Submit the echelon.");
+                        System.out.println("1- Juniors. 2- Seniors. 3- Veterans I. 4- Veterans II. 5- Veterans III. 6- Veterans IV. 7- Veterans V. 8- Veterans VI. 9- Veterans VII:");
+                        int participantEchelon = scanner.nextInt();
                         
                         System.out.println("Submit event name to register this participant:");
                         read = System.in.read(b);
@@ -146,37 +146,8 @@ public class Client {
                         String eventNameForPodium = new String(b, 0, read -1);
                         
                         System.out.println("Submit echelon.");
-                        System.out.println("1- Juniors. 2- Seniors. 3- Veterans I. 4- Veterans II. 5- Veterans III. 6- Veterans IV. 7- Veterans V. 8- Veterans VI. 9- Veterans VII:");
+                        System.out.println("1- Juniors (18-19). 2- Seniors (20-34). 3- Veterans 35 (35-39). 4- Veterans 40 (40-44). 5- Veterans 45 (45-49). 6- Veterans 50 (50-54). 7- Veterans 55 (55-59). 8- Veterans 60 (60-64). 9- Veterans 65+ (+65):");
                         int echelon = scanner.nextInt();
-                        switch(echelon) {
-                            case 1: // Juniors (18-19)
-                                
-                                break;
-                            case 2: // Seniors (20-34)
-                                
-                                break;
-                            case 3: // Veterans I (35-39)
-                                
-                                break;
-                            case 4: // Veterans II (40-44)
-                                
-                                break;
-                            case 5: // Veterans III (45-49)
-                                
-                                break;
-                            case 6: // Veterans IV (50-54)
-                                
-                                break;
-                            case 7: // Veterans V (55-59)
-                                
-                                break;
-                            case 8: // Veterans VI (60-64)
-                                
-                                break;
-                            case 9: // Veterans VII (+65)
-                                
-                                break;  
-                        }
                         
                         break;
                     case 8: // Exit
