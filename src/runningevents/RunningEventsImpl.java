@@ -163,13 +163,13 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
             if(rsVerify.getInt(1) > 0){
                 switch(type) {
                     case 1:
-                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE trial_time NOT NULL ORDER BY trial_time ASC");
+                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE trial_time IS NOT NULL ORDER BY trial_time ASC");
                         break;
                     case 2:
-                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='M' AND trial_time NOT NULL ORDER BY trial_time ASC");
+                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='M' AND trial_time IS NOT NULL ORDER BY trial_time ASC");
                         break;
                     case 3:
-                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='F' AND trial_time NOT NULL ORDER BY trial_time ASC");
+                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='F' AND trial_time IS NOT NULL ORDER BY trial_time ASC");
                         break;                    
                 }
 
