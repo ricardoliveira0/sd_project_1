@@ -83,9 +83,9 @@ public class Client {
                         read = System.in.read(b);
                         String participantName = new String(b, 0, read -1);
                         
-                        System.out.println("Submit the gender:");
-                        read = System.in.read(b);
-                        String participantGender = new String(b, 0, read -1);
+                        System.out.println("Submit the gender.");
+                        System.out.println("1- Male. 2- Female:");
+                        int participantGender = scanner.nextInt();
                         
                         System.out.println("Submit the echelon.");
                         System.out.println("1- Juniors. 2- Seniors. 3- Veterans I. 4- Veterans II. 5- Veterans III. 6- Veterans IV. 7- Veterans V. 8- Veterans VI. 9- Veterans VII:");
@@ -111,12 +111,14 @@ public class Client {
                         read = System.in.read(b);
                         String eventNameForTrialTime = new String(b, 0, read -1);
                         
-                        System.out.println("Submit the participant number:");
+                        System.out.println("Submit the participant dorsal:");
                         int participantNoForTrialTime = scanner.nextInt();
                         
                         System.out.println("Submit the participant trial time:");
                         read = System.in.read(b);
                         String participantTrialTime = new String(b, 0, read -1);
+                        
+                        event.setParticipantTrialTime(eventNameForTrialTime, participantNoForTrialTime, participantTrialTime);
                         
                         break;
                     case 6: // Get general scoreboard
@@ -127,17 +129,8 @@ public class Client {
                         System.out.println("Submit scoreboard type.");
                         System.out.println("1- Absolut. 2- Male. 3- Female:");
                         int scoreboardType = scanner.nextInt();
-                        switch(scoreboardType) {
-                            case 1: // Absolut
-                                
-                                break;
-                            case 2: // Male
-                                
-                                break;
-                            case 3: // Female
-                                
-                                break;
-                        }
+                        
+                        output(event.getGeneralScoreboard(eventNameForScoreboard, scoreboardType));
                         
                         break;
                     case 7: // Get podium

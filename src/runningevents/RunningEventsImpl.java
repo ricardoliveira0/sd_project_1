@@ -44,7 +44,7 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
                         fullType = "No type specified";
                 }
                 stmt.executeUpdate("INSERT INTO event_list VALUES ('" + name + "','"+ date +"','" + fullType + "')");
-                stmt.executeUpdate("CREATE TABLE \"" + name + "\" (id serial, name text, gender char(1), echelon text, trial_time time)");
+                stmt.executeUpdate("CREATE TABLE \"" + name + "\" (id serial, name text, gender char(1), echelon text, trial_time time(2))");
             } 
             else {
                 System.err.println("Error: Event name already exists");
@@ -73,8 +73,9 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
         return cb;
     }
 
-    public void registerParticipant(String participantName, String gender, int echelon, String eventName) throws RemoteException {
+    public void registerParticipant(String participantName, int gender, int echelon, String eventName) throws RemoteException {
         String fullEchelon = null;
+        String fullGender = null;
         try {
             switch(echelon) {
                 case 1:
@@ -105,7 +106,15 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
                     fullEchelon = "Veterans 65+";
                     break;  
             }
-            stmt.executeUpdate("INSERT INTO \"" + eventName + "\" (name, gender, echelon) VALUES ('" + participantName + "','"+ gender +"','" + fullEchelon + "')");
+            switch(gender) {
+                case 1:
+                    fullGender = "M";
+                    break;
+                case 2:
+                    fullGender = "F";
+                    break;
+            }
+            stmt.executeUpdate("INSERT INTO \"" + eventName + "\" (name, gender, echelon) VALUES ('" + participantName + "','"+ fullGender +"','" + fullEchelon + "')");
         } catch(Exception e) {
             e.printStackTrace();
             System.err.println("Error: Query was not executed");
@@ -136,12 +145,56 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
         return cb;
     }
 
-    public void setParticipantTrialTime(String name, int number, String time) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setParticipantTrialTime(String name, int dorsal, String time) throws RemoteException {
+        try {
+            stmt.executeUpdate("UPDATE \"" + name + "\" SET trial_time = '" + time + "' WHERE id = " + dorsal);
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.err.println("Error: Query was not executed");
+        }
     }
 
     public serverCallback getGeneralScoreboard(String name, int type) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        serverCallback cb = new serverCallback();
+        ResultSet rs = null;
+        try {
+            ResultSet rsVerify = stmt.executeQuery("SELECT COUNT(trial_time) FROM \"" + name +"\"");
+            rsVerify.next();
+            if(rsVerify.getInt(1) > 0){
+                switch(type) {
+                    case 1:
+                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE trial_time NOT NULL ORDER BY trial_time ASC");
+                        break;
+                    case 2:
+                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='M' AND trial_time NOT NULL ORDER BY trial_time ASC");
+                        break;
+                    case 3:
+                        rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='F' AND trial_time NOT NULL ORDER BY trial_time ASC");
+                        break;                    
+                }
+
+                while(rs.next()) {
+                    String participantID = rs.getString("id");
+                    String participantName = rs.getString("name");
+                    String participantGender = rs.getString("gender");
+                    String participantTime = rs.getString("trial_time");
+                    participantID = participantID.concat(" | ");
+                    participantID = participantID.concat(participantName);
+                    participantID = participantID.concat(" | ");
+                    participantID = participantID.concat(participantGender);
+                    participantID = participantID.concat(" | ");
+                    participantID = participantID.concat(participantTime);
+                    cb.getList().add(participantID);
+                }
+            }
+            else {
+                System.err.println("Error: There are no participants with trial time registered");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.err.println("Error: Query was not executed");
+        }
+        return cb;
     }
 
     public serverCallback getPodium(String name, int echelon) throws RemoteException {
