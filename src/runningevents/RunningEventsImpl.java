@@ -60,11 +60,9 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
         try {
             ResultSet rs = stmt.executeQuery("SELECT name, type FROM event_list WHERE date = '" + date + "'");
             while(rs.next()) {
-                String eventName = rs.getString("name");
-                String eventType = rs.getString("type");
-                eventName = eventName.concat(" | ");
-                eventName = eventName.concat(eventType);
-                cb.getList().add(eventName);
+                String callback = "";
+                callback = callback.concat(rs.getString("type") + " | " + rs.getString("name"));
+                cb.getList().add(callback);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -126,17 +124,9 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
         try {
             ResultSet rs = stmt.executeQuery("SELECT * FROM \"" + name + "\"");
             while(rs.next()) {
-                String participantID = rs.getString("id");
-                String participantName = rs.getString("name");
-                String participantGender = rs.getString("gender");
-                String participantEchelon = rs.getString("echelon");
-                participantID = participantID.concat(" | ");
-                participantID = participantID.concat(participantName);
-                participantID = participantID.concat(" | ");
-                participantID = participantID.concat(participantGender);
-                participantID = participantID.concat(" | ");
-                participantID = participantID.concat(participantEchelon);
-                cb.getList().add(participantID);
+                String callback = "";
+                callback = callback.concat(rs.getString("id") + " | " + rs.getString("name") + " | " + rs.getString("gender") + " | " + rs.getString("echelon"));
+                cb.getList().add(callback);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -172,19 +162,12 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
                         rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='F' AND trial_time IS NOT NULL ORDER BY trial_time ASC");
                         break;                    
                 }
-
+                int pos = 1;
                 while(rs.next()) {
-                    String participantID = rs.getString("id");
-                    String participantName = rs.getString("name");
-                    String participantGender = rs.getString("gender");
-                    String participantTime = rs.getString("trial_time");
-                    participantID = participantID.concat(" | ");
-                    participantID = participantID.concat(participantName);
-                    participantID = participantID.concat(" | ");
-                    participantID = participantID.concat(participantGender);
-                    participantID = participantID.concat(" | ");
-                    participantID = participantID.concat(participantTime);
-                    cb.getList().add(participantID);
+                    String callback = "";
+                    callback = callback.concat("[" + pos + "] " + rs.getString("name") + "-" + rs.getString("id") + "   (" + rs.getString("trial_time") + ")");
+                    cb.getList().add(callback);
+                    pos++;
                 }
             }
             else {
@@ -198,6 +181,58 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
     }
 
     public serverCallback getPodium(String name, int echelon) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        serverCallback cb = new serverCallback();
+        ResultSet rs = null;
+        try {
+            ResultSet rsVerify = stmt.executeQuery("SELECT COUNT(trial_time) FROM \"" + name +"\"");
+            rsVerify.next();
+            if(rsVerify.getInt(1) > 0){
+                String fullEchelon = null;
+                switch(echelon) {
+                    case 1:
+                        fullEchelon = "Juniors";
+                        break;
+                    case 2:
+                        fullEchelon = "Seniors";
+                        break;
+                    case 3:
+                        fullEchelon = "Veterans 35";
+                        break;
+                    case 4:
+                        fullEchelon = "Veterans 40";
+                        break;
+                    case 5:
+                        fullEchelon = "Veterans 45";
+                        break;
+                    case 6:
+                        fullEchelon = "Veterans 50";
+                        break;
+                    case 7:
+                        fullEchelon = "Veterans 55";
+                        break;
+                    case 8:
+                        fullEchelon = "Veterans 60";
+                        break;
+                    case 9:
+                        fullEchelon = "Veterans 65+";
+                        break;                    
+                }
+                rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='M' AND echelon='" + fullEchelon + "' AND trial_time IS NOT NULL ORDER BY trial_time ASC LIMIT 3");
+                int pos = 1;
+                while(rs.next()) {
+                    String callback = "";
+                    callback = callback.concat("[" + pos + "] " + rs.getString("name") + "-" + rs.getString("id") + "   (" + rs.getString("trial_time") + ")");
+                    cb.getList().add(callback);
+                    pos++;
+                }
+            }
+            else {
+                System.err.println("Error: There are no participants with trial time registered");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.err.println("Error: Query was not executed");
+        }
+        return cb;
     }
 }
