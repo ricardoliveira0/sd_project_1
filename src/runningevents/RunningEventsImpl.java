@@ -199,18 +199,29 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
 
     public serverCallback getPodium(String name, int echelon) throws RemoteException {
         serverCallback cb = new serverCallback();
-        ResultSet rs = null;
+        ResultSet rsMale = null;
+        ResultSet rsFemale = null;
         try {
             ResultSet rsVerify = stmt.executeQuery("SELECT COUNT(trial_time) FROM \"" + name +"\"");
             rsVerify.next();
             if(rsVerify.getInt(1) > 0){
                 String fullEchelon = null;
                 fullEchelon = echelonInterpreter(echelon);
-                rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='M' AND echelon='" + fullEchelon + "' AND trial_time IS NOT NULL ORDER BY trial_time ASC LIMIT 3");
+                rsMale = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='M' AND echelon='" + fullEchelon + "' AND trial_time IS NOT NULL ORDER BY trial_time ASC LIMIT 3");
                 int pos = 1;
-                while(rs.next()) {
+                cb.getList().add("================[ MALE PODIUM ]===============");
+                while(rsMale.next()) {
                     String callback = "";
-                    callback = callback.concat("[" + pos + "] " + rs.getString("name") + "-" + rs.getString("id") + "   (" + rs.getString("trial_time") + ")");
+                    callback = callback.concat("[" + pos + "] " + rsMale.getString("name") + "-" + rsMale.getString("id") + "   (" + rsMale.getString("trial_time") + ")");
+                    cb.getList().add(callback);
+                    pos++;
+                }
+                rsFemale = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='F' AND echelon='" + fullEchelon + "' AND trial_time IS NOT NULL ORDER BY trial_time ASC LIMIT 3");
+                cb.getList().add("");
+                cb.getList().add("===============[ FEMALE PODIUM ]==============");
+                while(rsFemale.next()) {
+                    String callback = "";
+                    callback = callback.concat("[" + pos + "] " + rsFemale.getString("name") + "-" + rsFemale.getString("id") + "   (" + rsFemale.getString("trial_time") + ")");
                     cb.getList().add(callback);
                     pos++;
                 }
