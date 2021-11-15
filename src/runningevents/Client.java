@@ -28,7 +28,6 @@ public class Client {
         if(args.length == 2) {
             host = args[0];
             port = Integer.parseInt(args[1]);
-            System.out.println("HOST:"+host+" | PORT:"+port);
         } 
         else {
             System.err.println("Error: Invalid format. Args format: '<host> <port>'");
@@ -40,6 +39,7 @@ public class Client {
             RunningEvents event = (RunningEvents) java.rmi.Naming.lookup("rmi://" + host + ":" + port + "/runningevents");
             System.out.println("Successfully connected to " + host + ":" + port);
             while(true) {
+                System.out.println("");
                 System.out.println("==============================================");
                 System.out.println("==================== MENU ====================");
                 System.out.println("1. Register new event");
@@ -95,8 +95,8 @@ public class Client {
                         read = System.in.read(b);
                         String eventNameToRegisterParticipant = new String(b, 0, read -1);
                         
-                        event.registerParticipant(participantName, participantGender, participantEchelon, eventNameToRegisterParticipant);
-                        
+                        int dorsal = event.registerParticipant(participantName, participantGender, participantEchelon, eventNameToRegisterParticipant);
+                        System.out.println("Successfully registered " + participantName + " with dorsal " + dorsal);
                         break;
                     case 4: // List participants -> event
                         System.out.println("Submit the event name:");
@@ -141,6 +141,8 @@ public class Client {
                         System.out.println("Submit echelon.");
                         System.out.println("1- Juniors (18-19). 2- Seniors (20-34). 3- Veterans 35 (35-39). 4- Veterans 40 (40-44). 5- Veterans 45 (45-49). 6- Veterans 50 (50-54). 7- Veterans 55 (55-59). 8- Veterans 60 (60-64). 9- Veterans 65+ (+65):");
                         int echelon = scanner.nextInt();
+                        
+                        output(event.getPodium(eventNameForPodium, echelon));
                         
                         break;
                     case 8: // Exit

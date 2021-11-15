@@ -105,9 +105,10 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
         return cb;
     }
 
-    public void registerParticipant(String participantName, int gender, int echelon, String eventName) throws RemoteException {
+    public int registerParticipant(String participantName, int gender, int echelon, String eventName) throws RemoteException {
         String fullEchelon = null;
         String fullGender = null;
+        int cbDorsal = 0;
         try {
             fullEchelon = echelonInterpreter(echelon);
             switch(gender) {
@@ -123,6 +124,16 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
             e.printStackTrace();
             System.err.println("Error: Query was not executed");
         }
+        
+        try {
+            ResultSet rs = stmt.executeQuery("SELECT id FROM \"" + eventName + "\" WHERE name = '" + participantName +"' AND gender = '" + fullGender + "' AND echelon = '" + fullEchelon + "'");
+            rs.next();
+            cbDorsal = rs.getInt("id");
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.err.println("Error: Query was not executed");
+        }
+        return cbDorsal;
     }
 
     public serverCallback listParticipants(String name) throws RemoteException {

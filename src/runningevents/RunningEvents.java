@@ -15,7 +15,7 @@ public interface RunningEvents extends java.rmi.Remote {
     
     public serverCallback getDayEvents(String date) throws java.rmi.RemoteException;
     
-    public void registerParticipant(String participantName, int gender, int echelon, String eventName) throws java.rmi.RemoteException;
+    public int registerParticipant(String participantName, int gender, int echelon, String eventName) throws java.rmi.RemoteException;
     
     public serverCallback listParticipants(String name) throws java.rmi.RemoteException;
     
