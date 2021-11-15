@@ -95,7 +95,7 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
             ResultSet rs = stmt.executeQuery("SELECT name, type FROM event_list WHERE date = '" + date + "'");
             while(rs.next()) {
                 String callback = "";
-                callback = callback.concat(rs.getString("type") + " | " + rs.getString("name"));
+                callback = callback.concat(rs.getString("name") + " | " + rs.getString("type"));
                 cb.getList().add(callback);
             }
         } catch(Exception e) {
