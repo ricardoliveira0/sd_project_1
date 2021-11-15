@@ -88,7 +88,7 @@ public class Client {
                         int participantGender = scanner.nextInt();
                         
                         System.out.println("Submit the echelon.");
-                        System.out.println("1- Juniors. 2- Seniors. 3- Veterans I. 4- Veterans II. 5- Veterans III. 6- Veterans IV. 7- Veterans V. 8- Veterans VI. 9- Veterans VII:");
+                        System.out.println("1- Juniors. 2- Seniors. 3- Veterans 35. 4- Veterans 40. 5- Veterans 45. 6- Veterans 50. 7- Veterans 55. 8- Veterans 60. 9- Veterans +65:");
                         int participantEchelon = scanner.nextInt();
                         
                         System.out.println("Submit event name to register this participant:");
@@ -156,6 +156,5 @@ public class Client {
             e.printStackTrace();
             System.err.println("Error: Could not connect to specified host:port");
         }
-
     }
 }
