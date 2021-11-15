@@ -22,6 +22,40 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
     public RunningEventsImpl(Statement statement) throws java.rmi.RemoteException {
         this.stmt = statement;
     }
+    
+    private String echelonInterpreter(int echelon) {
+        String fullEchelon = null;
+        switch(echelon) {
+            case 1:
+                fullEchelon = "Juniors";
+                break;
+            case 2:
+                fullEchelon = "Seniors";
+                break;
+            case 3:
+                fullEchelon = "Veterans 35";
+                break;
+            case 4:
+                fullEchelon = "Veterans 40";
+                break;
+            case 5:
+                fullEchelon = "Veterans 45";
+                break;
+            case 6:
+                fullEchelon = "Veterans 50";
+                break;
+            case 7:
+                fullEchelon = "Veterans 55";
+                break;
+            case 8:
+                fullEchelon = "Veterans 60";
+                break;
+            case 9:
+                fullEchelon = "Veterans 65+";
+                break;  
+        }
+        return fullEchelon;
+    }
 
     public void registerEvent(String name, String date, int type) throws RemoteException {
         String fullType = null;
@@ -75,35 +109,7 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
         String fullEchelon = null;
         String fullGender = null;
         try {
-            switch(echelon) {
-                case 1:
-                    fullEchelon = "Juniors";
-                    break;
-                case 2:
-                    fullEchelon = "Seniors";
-                    break;
-                case 3:
-                    fullEchelon = "Veterans 35";
-                    break;
-                case 4:
-                    fullEchelon = "Veterans 40";
-                    break;
-                case 5:
-                    fullEchelon = "Veterans 45";
-                    break;
-                case 6:
-                    fullEchelon = "Veterans 50";
-                    break;
-                case 7:
-                    fullEchelon = "Veterans 55";
-                    break;
-                case 8:
-                    fullEchelon = "Veterans 60";
-                    break;
-                case 9:
-                    fullEchelon = "Veterans 65+";
-                    break;  
-            }
+            fullEchelon = echelonInterpreter(echelon);
             switch(gender) {
                 case 1:
                     fullGender = "M";
@@ -188,35 +194,7 @@ public class RunningEventsImpl extends UnicastRemoteObject implements RunningEve
             rsVerify.next();
             if(rsVerify.getInt(1) > 0){
                 String fullEchelon = null;
-                switch(echelon) {
-                    case 1:
-                        fullEchelon = "Juniors";
-                        break;
-                    case 2:
-                        fullEchelon = "Seniors";
-                        break;
-                    case 3:
-                        fullEchelon = "Veterans 35";
-                        break;
-                    case 4:
-                        fullEchelon = "Veterans 40";
-                        break;
-                    case 5:
-                        fullEchelon = "Veterans 45";
-                        break;
-                    case 6:
-                        fullEchelon = "Veterans 50";
-                        break;
-                    case 7:
-                        fullEchelon = "Veterans 55";
-                        break;
-                    case 8:
-                        fullEchelon = "Veterans 60";
-                        break;
-                    case 9:
-                        fullEchelon = "Veterans 65+";
-                        break;                    
-                }
+                fullEchelon = echelonInterpreter(echelon);
                 rs = stmt.executeQuery("SELECT * FROM \"" + name + "\" WHERE gender='M' AND echelon='" + fullEchelon + "' AND trial_time IS NOT NULL ORDER BY trial_time ASC LIMIT 3");
                 int pos = 1;
                 while(rs.next()) {
