@@ -17,10 +17,15 @@ public class Client {
     private static int port, opt, read;
     private static byte[] b = new byte[128];
     
-    public static void output(serverCallback cb){
+    public static void output(serverCallback cb) {
+        clearScreen();
         for (int i = 0; i < cb.getList().size(); i++){
             System.out.println(cb.getList().get(i));
         }
+    }
+    
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J"); // print to clear the terminal
     }
     
     public static void main(String[] args) {
@@ -55,6 +60,7 @@ public class Client {
                 opt = scanner.nextInt();
                 switch(opt) {
                     case 1: // Register new event
+                        clearScreen();
                         System.out.println("Submit the event name:");
                         read = System.in.read(b);
                         String eventName = new String(b, 0, read -1);
@@ -71,6 +77,7 @@ public class Client {
                         
                         break;
                     case 2: // Get all events -> day
+                        clearScreen();
                         System.out.println("Submit the event date to search. Format <YYYY-MM-DD>:");
                         read = System.in.read(b);
                         String eventSearchDate = new String(b, 0, read -1);
@@ -79,6 +86,7 @@ public class Client {
                         
                         break;
                     case 3: // Register new participant
+                        clearScreen();
                         System.out.println("Submit the participant name:");
                         read = System.in.read(b);
                         String participantName = new String(b, 0, read -1);
@@ -99,6 +107,7 @@ public class Client {
                         System.out.println("Successfully registered " + participantName + " with dorsal " + dorsal);
                         break;
                     case 4: // List participants -> event
+                        clearScreen();
                         System.out.println("Submit the event name:");
                         read = System.in.read(b);
                         String eventSearchName = new String(b, 0, read -1);
@@ -107,6 +116,7 @@ public class Client {
                         
                         break;
                     case 5: // Set participant trial time
+                        clearScreen();
                         System.out.println("Submit the event name:");
                         read = System.in.read(b);
                         String eventNameForTrialTime = new String(b, 0, read -1);
@@ -122,6 +132,7 @@ public class Client {
                         
                         break;
                     case 6: // Get general scoreboard
+                        clearScreen();
                         System.out.println("Submit the event name:");
                         read = System.in.read(b);
                         String eventNameForScoreboard = new String(b, 0, read -1);
@@ -134,6 +145,7 @@ public class Client {
                         
                         break;
                     case 7: // Get podium
+                        clearScreen();
                         System.out.println("Submit the event name:");
                         read = System.in.read(b);
                         String eventNameForPodium = new String(b, 0, read -1);
